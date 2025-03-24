@@ -86,7 +86,7 @@ class _EditPostPageState extends State<EditPostPage> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Post updated successfully')),
+          const SnackBar(content: Text('تم تحديث المنشور بنجاح')),
         );
       }
     } catch (e) {
@@ -115,7 +115,7 @@ class _EditPostPageState extends State<EditPostPage> {
         elevation: 4,
         centerTitle: true,
         title: const Text(
-          'Edit Post',
+          'تعديل المنشور',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -146,7 +146,7 @@ class _EditPostPageState extends State<EditPostPage> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFF95A5A6).withOpacity(0.2),
-                hintText: 'Write your post here...',
+                hintText: 'محتوى المنشور',
                 hintStyle: const TextStyle(
                   color: Color(0xFF95A5A6),
                 ),
@@ -177,7 +177,7 @@ class _EditPostPageState extends State<EditPostPage> {
               ),
               icon: const Icon(Icons.image),
               label: const Text(
-                'Change Image',
+                'تغيير الصورة',
                 style: TextStyle(
                   color: Color(0xFFF5F5F5),
                   fontWeight: FontWeight.bold,
@@ -197,7 +197,7 @@ class _EditPostPageState extends State<EditPostPage> {
               child: _isLoading
                 ? const CircularProgressIndicator(color: Colors.greenAccent)
                 : const Text(
-                    'Update Post',
+                    'تحديث المنشور',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

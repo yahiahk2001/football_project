@@ -63,7 +63,7 @@ class GeneralPostCardHeader extends StatelessWidget {
             height: 32,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32),
-              child: Image.network(authorImage??'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu-XtptWTEvV4FWTI1Ge-mgfhpQCNgKvwTXg&s'
+              child: Image.network(authorImage??'https://www.ahlamak.net/f/res/h37/dream-phrases/000/013/30/0001330-487-ahlamak-1cc825172ca240099db63efa70ffcbee-r00.jpg'
                 ,
                 fit: BoxFit.cover,
               ),

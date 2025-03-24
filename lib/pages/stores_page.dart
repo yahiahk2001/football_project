@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:football_project/pages/store_details_page.dart';
 
 class StoresPage extends StatelessWidget {
   final List<Map<String, dynamic>> stores = [
@@ -56,10 +55,11 @@ class StoresPage extends StatelessWidget {
             final store = stores[index];
             return GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StoreDetailsPage(store: store),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('ميزة المتجر غير متوفرة حاليا'),
+                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
                   ),
                 );
               },

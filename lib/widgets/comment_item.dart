@@ -195,17 +195,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                         fontSize: 10,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.thumb_up_alt_outlined, size: 12),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.reply_outlined, size: 12),
-                      constraints: const BoxConstraints(),
-                      onPressed: () {},
-                    ),
+                    
                   ],
                 ),
               ],
@@ -214,7 +204,7 @@ class _CommentWidgetState extends State<CommentWidget> {
           PopupMenuButton<String>(
             onSelected: (String result) {
               switch (result) {
-                case 'edit':
+                case 'تعديل':
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -224,10 +214,10 @@ class _CommentWidgetState extends State<CommentWidget> {
                     ),
                   );
                   break;
-                case 'delete':
+                case 'حذف':
                   _showDeleteConfirmationDialog(context);
                   break;
-                case 'report':
+                case 'ابلاغ':
                   // Handle report comment
                   break;
               }
@@ -235,22 +225,22 @@ class _CommentWidgetState extends State<CommentWidget> {
             itemBuilder: (BuildContext context) => myId == widget.user.id
                 ? <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
-                      value: 'edit',
-                      child: Text('Edit comment'),
+                      value: 'تعديل',
+                      child: Text('تعديل التعليق'),
                     ),
                     const PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Text('Delete comment'),
+                      value: 'حذف',
+                      child: Text('حذف التعليق'),
                     ),
                   ]
                 : <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
-                      value: 'hide',
-                      child: Text('Hide comment'),
+                      value: 'اخفاء',
+                      child: Text('اخفاء التعليق'),
                     ),
                     const PopupMenuItem<String>(
-                      value: 'report',
-                      child: Text('Report comment'),
+                      value: 'ابلاغ',
+                      child: Text('ابلاغ عن التعليق'),
                     ),
                   ],
             icon: const Icon(Icons.more_horiz, color: goldColor),

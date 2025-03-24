@@ -46,7 +46,7 @@ class _EditCommentPageState extends State<EditCommentPage> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('comment updated successfully')),
+          const SnackBar(content: Text('تم تحديث التعليق بنجاح')),
         );
       }
     } catch (e) {
@@ -75,7 +75,7 @@ class _EditCommentPageState extends State<EditCommentPage> {
         elevation: 4,
         centerTitle: true,
         title: const Text(
-          'Edit comment',
+          'تعديل التعليق',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -93,7 +93,7 @@ class _EditCommentPageState extends State<EditCommentPage> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFF95A5A6).withOpacity(0.2),
-                hintText: 'Write your comment here...',
+                hintText: 'اكتب تعليقك هنا...',
                 hintStyle: const TextStyle(
                   color: Color(0xFF95A5A6),
                 ),
@@ -115,7 +115,7 @@ class _EditCommentPageState extends State<EditCommentPage> {
               child: _isLoading
                 ? const CircularProgressIndicator(color: Colors.greenAccent)
                 : const Text(
-                    'Update comment',
+                    'تحديث التعليق',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

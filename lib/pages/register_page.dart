@@ -189,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 100,
                     ),
                     const Text(
-                      'Create Account',
+                      'انشاء حساب',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -198,7 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Sign up to get started.',
+                      'انشاء حساب جديد للبدء في استخدام التطبيق',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -211,7 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: _usernameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
+                          return 'الرجاء ادخال الاسم';
                         }
                         return null;
                       },
@@ -253,7 +253,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'I am a',
+                      'انا .. ',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -273,7 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                         const Text(
-                          'Media Reporter',
+                          'صحفي',
                           style: TextStyle(color: Colors.white),
                         ),
                         const SizedBox(width: 16),
@@ -290,7 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const Text(
                           style: TextStyle(color: Colors.white),
-                          'Visitor',
+                          'مستخدم عادي',
                         ),
                       ],
                     ),
@@ -298,11 +298,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 8),
                       CustomTextField(
                         icon: Icons.code,
-                        label: 'Reporter Code',
+                        label: 'كود الصحفي',
                         controller: _codeController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter reporter code';
+                            return 'الرجاء ادخال كود الصحفي';
                           }
                           return null;
                         },
@@ -332,7 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: _isLoading
                           ? const CircularProgressIndicator(color: primaryColor)
                           : const Text(
-                              'Sign Up',
+                              'انشاء حساب',
                               style: TextStyle(
                                 fontSize: 18,
                                 color: AppColors.primary,
@@ -345,7 +345,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Already have an account?',
+                          'تملك حساب؟',
                           style: TextStyle(color: Colors.white,),
                         ),
                         TextButton(
@@ -353,7 +353,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             Navigator.pop(context);
                           },
                           child: const Text(
-                            'Log In',
+                            'سجل دخول',
                             style: TextStyle(
                               color: Colors.cyan,
                               fontSize: 16,
@@ -369,7 +369,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'Or continue with',
+                            'او سجل الدخول بواسطة',
                             style: TextStyle(color: lightTextColor),
                           ),
                         ),

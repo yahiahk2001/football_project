@@ -17,14 +17,26 @@ class CustomSocialButton extends StatelessWidget {
       onTap: () {
         // Handle social login
       },
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          border: Border.all(color: lightTextColor),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(icon, color: color, size: 24),
+      child: GestureDetector(
+  onTap: () {
+    // إظهار رسالة خفيفة عند النقر
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('التسجيل غير متاح عن طريق الفيسبوك والجيميل حاليا'),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
       ),
+    );
+  },
+  child: Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      border: Border.all(color: lightTextColor),
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Icon(icon, color: color, size: 24),
+  ),
+),
     );
   }
 }

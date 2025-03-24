@@ -30,11 +30,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter your email';
+      return 'الرجاء إدخال بريدك الإلكتروني';
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email';
+      return 'الرجاء إدخال بريد إلكتروني صالح';
     }
     return null;
   }
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } on AuthException catch (error) {
       _showError(error.message);
     } catch (error) {
-      _showError('An unexpected error occurred');
+      _showError('الرجاء التحقق من اتصال الإنترنت الخاص بك');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     
                     ),
                     const Text(
-                      'Welcome Back',
+                      'اهلا بك',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Sign in to continue.',
+                      'سجل الدخول للمتابعة',
                       style: TextStyle(fontSize: 16, color: lightTextColor),
                     ),
                     const SizedBox(height: 32),
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return 'الرجاء إدخال كلمة المرور';
                         }
                         return null;
                       },
@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: accentColor,
                             )
                           : const Text(
-                              'Log In',
+                              'تسجيل الدخول',
                               style: TextStyle(
                                 color: AppColors.primary,
                                 fontSize: 18,
@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                           },
                           child: const Text(
-                            'Sign Up',
+                            'انشاء حساب جديد',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -219,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'Or continue with',
+                            'او سجل الدخول بواسطة',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

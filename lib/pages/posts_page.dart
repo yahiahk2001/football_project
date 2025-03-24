@@ -157,7 +157,7 @@ class _PostsPageState extends State<PostsPage>
       }
 
       if (controller.reporterPosts.isEmpty) {
-        return const Center(child: Text("No posts available"));
+        return const Center(child: Text("لا توجد أخبار"));
       }
 
       return RefreshIndicator(

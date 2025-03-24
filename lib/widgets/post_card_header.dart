@@ -24,17 +24,17 @@ class PostCardHeader extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to delete this post?'),
+          title: const Text('تاكيد الحذف'),
+          content: const Text('هل تريد حقًا حذف هذا المنشور؟'),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: const Text('الغاء'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Delete'),
+              child: const Text('حذف المنشور'),
               onPressed: () {
                 _deletePost(context);
                 controller.fetchReporterPosts();
@@ -47,7 +47,7 @@ class PostCardHeader extends StatelessWidget {
   }
 // أضف هذه الدالة إلى فئة PostCardHeader
 void _showReportDialog(BuildContext context) {
-  String reportReason = 'محتوى غير لائق'; // السبب الافتراضي
+  String reportReason = 'محتوى لا يتعلق بكرة القدم '; // السبب الافتراضي
   TextEditingController customReasonController = TextEditingController();
   bool isCustomReason = false;
   
@@ -75,9 +75,9 @@ void _showReportDialog(BuildContext context) {
                     }
                   },
                   items: <String>[
-                    'محتوى غير لائق',
+                    'محتوى لا يتعلق بكرة القدم ',
                     'خطاب كراهية',
-                    'معلومات مضللة',
+                    'معلومات غير صحيحة',
                     'انتهاك حقوق الملكية',
                     'أخرى'
                   ].map<DropdownMenuItem<String>>((String value) {
@@ -108,7 +108,7 @@ void _showReportDialog(BuildContext context) {
                 },
               ),
               TextButton(
-                child: const Text('إبلاغ'),
+                child: const Text('تاكيد الإبلاغ'),
                 onPressed: () {
                   // استخدم السبب المخصص إذا تم اختيار "أخرى"
                   final finalReason = (isCustomReason && customReasonController.text.isNotEmpty) 
@@ -257,7 +257,7 @@ void _submitReport(BuildContext context, String reason) async {
           PopupMenuButton<String>(
             onSelected: (String result) {
               switch (result) {
-                case 'edit':
+                case 'تعديل':
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -265,14 +265,14 @@ void _submitReport(BuildContext context, String reason) async {
                     ),
                   );
                   break;
-                case 'delete':
+                case 'حذف المنشور':
                   _showDeleteConfirmationDialog(context);
 
                   break;
-                case 'hide':
+                case 'اخفاء':
                   // Handle hide post
                   break;
-                case 'report':
+                case 'ابلاغ':
                 _showReportDialog(context); 
                   break;
               }
@@ -280,22 +280,22 @@ void _submitReport(BuildContext context, String reason) async {
             itemBuilder: (BuildContext context) => userId == post.userId
                 ? <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
-                      value: 'edit',
-                      child: Text('Edit Post'),
+                      value: 'تعديل',
+                      child: Text('تعديل المنشور'),
                     ),
                     const PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Text('Delete Post'),
+                      value: 'حذف المنشور',
+                      child: Text('حذف المنشور'),
                     ),
                   ]
                 : <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
-                      value: 'hide',
-                      child: Text('Hide Post'),
+                      value: 'اخفاء',
+                      child: Text('اخفاء المنشور'),
                     ),
                     const PopupMenuItem<String>(
-                      value: 'report',
-                      child: Text('Report Post'),
+                      value: 'ابلاغ',
+                      child: Text('الابلاغ عن المنشور'),
                     ),
                   ],
             icon: const Icon(Icons.more_horiz, color: goldColor),

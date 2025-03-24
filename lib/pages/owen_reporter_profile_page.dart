@@ -115,87 +115,76 @@ class _OwenReporterProfilePageState extends State<OwenReporterProfilePage> {
                   child: isLoading
                       ? const CircularProgressIndicator()
                       : UserNameAndIdentifier(
-                          name: _user?.username ?? 'No Name',
-                          identifier: _user?.identifier ?? '--',
+                          name: _user?.username ?? '',
+                          identifier: _user?.identifier ?? '-',
                         ),
                 ),
                 const SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '122',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          'Followers',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '67',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          'Following',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '37K',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          'Likes',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12.0),
+                
                 Center(
-                  child: SizedBox(
-                      width: 280,
-                      child: Text(
-                        _user?.bio ?? '',
-                        textAlign: TextAlign.center,
-                      )),
+                  child:   (_user!.bio != null && _user!.bio!.isNotEmpty)?
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF16213E),
+                        const Color(0xFF16213E).withOpacity(0.8),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(
+                            Icons.description,
+                            color: Colors.blue,
+                            size: 18,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'الوصف',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _user!.bio!,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey[300],
+                          height: 1.5,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ):Container(),
+              
+              
                 ),
                 const SizedBox(height: 18.0),
                 Row(
@@ -218,7 +207,7 @@ class _OwenReporterProfilePageState extends State<OwenReporterProfilePage> {
                         ),
                       ),
                       child: Text(
-                        'Edit profile',
+                        'تعديل الملف الشخصي',
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -246,7 +235,7 @@ class _OwenReporterProfilePageState extends State<OwenReporterProfilePage> {
                         ),
                       ),
                       child: Text(
-                        'Add new post',
+                        'اضافة منشور',
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,

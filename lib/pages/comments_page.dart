@@ -132,7 +132,7 @@ class _CommentsPageState extends State<CommentsPage> {
                       child: TextField(
                         controller: _commentController,
                         decoration: const InputDecoration(
-                          hintText: 'Add a comment...',
+                          hintText: 'اضف تعليق....',
                           border: OutlineInputBorder(),
                         ),
                       ),

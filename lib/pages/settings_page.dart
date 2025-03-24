@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:football_project/admins/dashboard.dart';
+import 'package:football_project/consts.dart';
 import 'package:football_project/pages/change_password_page.dart';
 import 'package:football_project/pages/login_page.dart';
 import 'package:football_project/pages/owen_reporter_profile_page.dart';
@@ -19,7 +20,99 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _notificationsEnabled = true;
-  String _languageSelected = 'English';
+  String _languageSelected = 'العربية';
+  String? userRole; // لتخزين دور المستخدم
+  bool isLoading = true; // للتحكم في تحميل البيانات
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserRole();
+  }
+void _showLogoutDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Text(
+          "تأكيد تسجيل الخروج",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        content: const Text(
+          "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              "إلغاء",
+              style: TextStyle(color: goldColor, fontSize: 16),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: () async {
+              await Supabase.instance.client.auth.signOut();
+              if (context.mounted) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              }
+            },
+            child: const Text(
+              "تسجيل الخروج",
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+  Future<void> fetchUserRole() async {
+    try {
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+
+      if (userId == null) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
+      final response = await Supabase.instance.client
+          .from('users')
+          .select('role')
+          .eq('user_id', userId)
+          .single();
+
+      if (response.containsKey('role')) {
+        setState(() {
+          userRole = response['role'];
+          isLoading = false;
+        });
+      }
+      print('User role: $userRole');
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching user role: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +125,21 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionTitle('General'),
+              const SectionTitle('عام'),
               SettingsOption(
                 icon: LucideIcons.bell,
-                title: 'Notifications',
+                title: 'الإشعارات',
                 trailing: Switch(
                   value: _notificationsEnabled,
                   onChanged: (value) {
                     setState(() {
+                       ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('ميزة الإشعارات ستكون متاحة قريباً'),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
                       _notificationsEnabled = value;
                     });
                   },
@@ -47,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsOption(
                 icon: LucideIcons.moon,
-                title: 'Dark Mode',
+                title: 'الوضع المظلم',
                 trailing: Switch(
                   value: themeProvider.isDarkMode,
                   onChanged: (value) {
@@ -57,10 +157,10 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsOption(
                 icon: LucideIcons.globe,
-                title: 'Language',
+                title: 'اللغة',
                 trailing: DropdownButton<String>(
                   value: _languageSelected,
-                  items: ['English', 'العربية']
+                  items: ['العربية', 'English']
                       .map((language) => DropdownMenuItem<String>(
                             value: language,
                             child: Text(language),
@@ -74,10 +174,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               const Divider(),
-              const SectionTitle('Account'),
+              const SectionTitle('الحساب'),
               SettingsOption(
                 icon: LucideIcons.user,
-                title: 'My Profile',
+                title: 'الملف الشخصي',
                 onTap: () async {
                   try {
                     // احصل على معرف المستخدم الحالي
@@ -135,7 +235,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsOption(
                 icon: LucideIcons.lock,
-                title: 'Change Password',
+                title: 'تغيير كلمة المرور',
                 onTap: () {
                   Navigator.push(
                     context,
@@ -144,50 +244,21 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 },
               ),
-              const Divider(),
-              const SectionTitle('Admin'),
-              SettingsOption(
+             (userRole == 'moderator'|| userRole == 'Moderator') ?const Divider():SizedBox(), 
+             (userRole == 'moderator'|| userRole == 'Moderator') ? const SectionTitle('Admin'):SizedBox(),
+              (userRole == 'moderator'|| userRole == 'Moderator') ? SettingsOption(
                 icon: LucideIcons.users,
                 title: 'Admin dashboard',
                 onTap: () async {
                   try {
-                    // احصل على معرف المستخدم الحالي
-                    final userId =
-                        Supabase.instance.client.auth.currentUser?.id;
 
-                    if (userId == null) {
-                      // في حالة عدم وجود مستخدم مسجل دخول
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('User not logged in')),
-                      );
-                      return;
-                    }
-
-                    // استعلام للحصول على دور المستخدم
-                    final response = await Supabase.instance.client
-                        .from('users')
-                        .select('role')
-                        .eq('user_id', userId)
-                        .single();
-                    print(response);
-
-                    if (!response.containsKey('role')) {
-                      throw Exception('Role not found');
-                    }
-
-                    final userRole = response['role'];
-                    print(userRole);
-
-                    // توجيه المستخدم بناءً على الدور
-                    if (userRole == 'moderator'|| userRole == 'Moderator') {
+                    
                      Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const ModerationDashboardPage()),
                 );
-                    }  else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('لا تمتلك الصلاحية')),
-                      );
-                    }
+                    
+                   
+                    
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Error fetching user role: $e')),
@@ -195,32 +266,26 @@ class _SettingsPageState extends State<SettingsPage> {
                   }
                 },
               
-              ),
+              ):SizedBox(),
               const Divider(),
-              const SectionTitle('App'),
+              const SectionTitle('المزيد'),
               SettingsOption(
-                icon: LucideIcons.info,
-                title: 'Share App',
+                icon: LucideIcons.share,
+                title: 'مشاركة التطبيق',
                 onTap: () {},
               ),
               SettingsOption(
                 icon: LucideIcons.info,
-                title: 'About',
+                title: 'عن التطبيق',
                 onTap: () {
-                  // Navigate to about page
+                  
                 },
               ),
               SettingsOption(
                 icon: LucideIcons.logOut,
-                title: 'Logout',
-                onTap: () async {
-                  await Supabase.instance.client.auth.signOut();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                  );
-                },
+                title: 'تسجيل الخروج',
+                onTap: () => _showLogoutDialog(context),
+
               ),
             ],
           ),

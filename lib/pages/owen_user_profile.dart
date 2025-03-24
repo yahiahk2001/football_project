@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:football_project/consts.dart';
 import 'package:football_project/models/user_model.dart';
 import 'package:football_project/pages/edit_profile.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -47,192 +46,399 @@ class _OwenUserProfilePageState extends State<OwenUserProfilePage> {
       print('Error fetching user data: $error');
     }
   }
-Future<void> _refreshPage() async {
+
+  Future<void> _refreshPage() async {
     await fetchUserData();
   }
+
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:primaryColor,
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _refreshPage,
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                backgroundColor: const Color(0xFF1A1A2E),
-                elevation: 0,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
+      backgroundColor: const Color(0xFF0F1729),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UpdateProfilePage(),
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.white),
-                    onPressed: () {
-                    Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UpdateProfilePage()),
-                        );
-                    },
-                  )
-                ],
-                expandedHeight: 250,
-                floating: false,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  background: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF1A1A2E),
-                          Color(0xFF16213E),
-                        ],
-                      ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 80,
-                            backgroundImage: NetworkImage(profileImageUrl ?? 'https://bitsofco.de/img/Qo5mfYDE5v-350.png'),
-                            backgroundColor: Colors.grey[800],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // اسم المستخدم
-                        Text(
-                          _user?.username  ?? '',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+              ).then((_) => _refreshPage());
+            },
+          )
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refreshPage,
+        child: SafeArea(
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Header Section with Improved Gradient
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
                           ),
                         ),
-                        
-                        // المعرف
-                        Center(
-                          child: Text(
-                            'ID: --',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-              
-                        // معلومات إضافية
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Column(
                           children: [
-                            // عدد المتابعين
-                            const ProfileInfoCard(
-                              title: 'Following',
-                              value: '0',
+                            // Profile Image with Better Styling and Tap to Zoom
+                            GestureDetector(
+                              onTap: () {
+                                if (profileImageUrl != null) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => ImageViewerDialog(imageUrl: profileImageUrl!),
+                                  );
+                                }
+                              },
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.blue.withOpacity(0.7),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 60,
+                                      backgroundImage: profileImageUrl != null
+                                          ? NetworkImage(profileImageUrl!)
+                                          : null,
+                                      backgroundColor: Colors.grey[800],
+                                      child: profileImageUrl == null
+                                          ? const Icon(
+                                              Icons.person,
+                                              size: 60,
+                                              color: Colors.white70,
+                                            )
+                                          : null,
+                                    ),
+                                  ),
+                                  if (profileImageUrl != null)
+                                    Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: const Color(0xFF16213E),
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          Icons.zoom_in,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
-                            // النادي المفضل
-                            ProfileInfoCard(
-                              title: 'Favorite Club',
-                              value: _user?.favoriteClub ?? '',
+                            const SizedBox(height: 16),
+                            
+                            // Username with Enhanced Typography
+                            Text(
+                              _user?.username ?? '',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            
+                            const SizedBox(height: 8),
+                            
+                            // Favorite Club with Badge Style
+                            if (_user?.favoriteClub != null && _user!.favoriteClub!.isNotEmpty)
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 50),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.15),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      _user!.favoriteClub!,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey[300],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      // User Stats Section with Enhanced Cards
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            // Type Card
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      const Color(0xFF16213E),
+                                      const Color(0xFF16213E).withOpacity(0.8),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.2),
+                                    width: 1,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    const Icon(
+                                      Icons.people,
+                                      color: Colors.blue,
+                                      size: 24,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'مستخدم',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            
+                            const SizedBox(width: 20),
+                            
+                            // Following Card
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      const Color(0xFF16213E),
+                                      const Color(0xFF16213E).withOpacity(0.8),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.2),
+                                    width: 1,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    const Icon(
+                                      Icons.person_add,
+                                      color: Colors.green,
+                                      size: 24,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      '0',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'يتابع',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
-              
-                        // السيرة الذاتية
-                        
-                        const SizedBox(height: 12),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      // Bio Section with Improved Styling
+                      if (_user?.bio != null && _user!.bio!.isNotEmpty)
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(16),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF16213E),
+                            gradient: LinearGradient(
+                              colors: [
+                                const Color(0xFF16213E),
+                                const Color(0xFF16213E).withOpacity(0.8),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: Colors.white.withOpacity(0.2),
                               width: 1,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          child: Text(
-                            _user?.bio ?? '',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[300],
-                              height: 1.5,
-                            ),
-                            textAlign: TextAlign.center,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.description,
+                                    color: Colors.blue,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'الوصف',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                _user!.bio!,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[300],
+                                  height: 1.5,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 24),
-                      ],
-                    ),
+                      
+                      const SizedBox(height: 30),
+                    ],
                   ),
-                ]),
-              ),
-            ],
-          ),
+                ),
         ),
       ),
     );
   }
 }
 
-// كلاس بطاقات المعلومات
-class ProfileInfoCard extends StatelessWidget {
-  final String title;
-  final String value;
+// Image Viewer Dialog for fullscreen image
+class ImageViewerDialog extends StatelessWidget {
+  final String imageUrl;
 
-  const ProfileInfoCard({
-    super.key,
-    required this.title,
-    required this.value,
-  });
+  const ImageViewerDialog({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF16213E),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.zero,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[400],
+          // Fullscreen interactive image
+          InteractiveViewer(
+            minScale: 0.5,
+            maxScale: 3.0,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+          
+          // Close button
+          Positioned(
+            top: 40,
+            right: 20,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
             ),
           ),
         ],

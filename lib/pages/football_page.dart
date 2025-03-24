@@ -38,6 +38,11 @@ class _FootballPageState extends State<FootballPage> {
     ];
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('اهم المباريات لاهم الفرق'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

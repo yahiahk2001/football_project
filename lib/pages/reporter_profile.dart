@@ -145,7 +145,7 @@ Future<void> checkIfFollowing() async {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Reporter Profile',
+          'ملف الصحفي',
           style: GoogleFonts.poppins(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -189,36 +189,95 @@ Future<void> checkIfFollowing() async {
               child: isUserLoading
                   ? const CircularProgressIndicator()
                   : UserNameAndIdentifier(
-                      name: _user?.username ?? 'No Name',
-                      identifier: _user?.identifier ?? '--',
+                      name: _user?.username ?? '',
+                      identifier: _user?.identifier ?? '-',
                     ),
             ),
             const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildStatColumn('0', 'Followers'),
-                _buildStatColumn('0', 'Following'),
-                _buildStatColumn('0', 'Likes'),
-              ],
-            ),
+            
             const SizedBox(height: 12.0),
             Center(
-              child: SizedBox(
-                  width: 280,
-                  child: isUserLoading
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          _user?.bio ?? ' ',
-                          textAlign: TextAlign.center,
-                        )),
+              child:   (_user!.bio != null && _user!.bio!.isNotEmpty)?
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF16213E),
+                        const Color(0xFF16213E).withOpacity(0.8),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.description,
+                            color: Colors.blue,
+                            size: 18,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'الوصف',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Center(
+                        child: Text(
+                          _user!.bio!,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[300],
+                            height: 1.5,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ):Container(),
+              
+              
             ),
             const SizedBox(height: 18.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('ميزة مشاركة الملف الشخصي ستكون متوفرة قريبا'),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     padding: const EdgeInsets.symmetric(
@@ -228,7 +287,7 @@ Future<void> checkIfFollowing() async {
                     ),
                   ),
                   child: Text(
-                    'Share profile',
+                    'مشاركة الملف الشخصي',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -251,7 +310,7 @@ Future<void> checkIfFollowing() async {
   child: isLoadingFollow
       ? const CircularProgressIndicator(color: Colors.white)
       : Text(
-          isFollowing ? 'Unfollow' : 'Follow',
+          isFollowing ? 'الغاء المتابعة' : 'متابعة',
           style: GoogleFonts.poppins(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -263,7 +322,7 @@ Future<void> checkIfFollowing() async {
             ),
             const SizedBox(height: 18.0),
             Text(
-              'Posts',
+              'المنشورات',
               style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -315,27 +374,5 @@ Future<void> checkIfFollowing() async {
     );
   }
 
-  Widget _buildStatColumn(String value, String label) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: GoogleFonts.poppins(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 4.0),
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey[600],
-          ),
-        ),
-      ],
-    );
-  }
+  
 }

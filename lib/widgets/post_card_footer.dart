@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:football_project/pages/comments_page.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:football_project/models/post_model.dart';
+import 'package:http/http.dart' as http;
 
 class PostCardFooter extends StatefulWidget {
   const PostCardFooter({super.key, required this.post});
@@ -192,11 +196,27 @@ class _PostCardFooterState extends State<PostCardFooter>
           ),
           IconButton(
             icon: const Icon(Icons.share, color: Colors.green),
-            onPressed: () {
-              final String postContent =
-                  '${widget.post.content}\n\n🔗 شاهد المزيد من اخبار كرة القدم في تطبيق Football Arena !';
-              Share.share(postContent);
-            },
+            onPressed: () async {
+  try {
+    final String postContent = '${widget.post.content}\n\n🔗 شاهد المزيد من اخبار كرة القدم في تطبيق Football Arena !';
+
+    // تحميل الصورة
+    if (widget.post.image != null && widget.post.image!.isNotEmpty) {
+      final response = await http.get(Uri.parse(widget.post.image!));
+      final tempDir = await getTemporaryDirectory();
+      final File file = File('${tempDir.path}/shared_image.jpg');
+      await file.writeAsBytes(response.bodyBytes);
+
+      // مشاركة الصورة مع النص
+      await Share.shareXFiles([XFile(file.path)], text: postContent);
+    } else {
+      // مشاركة النص فقط إذا لم تكن هناك صورة
+      await Share.share(postContent);
+    }
+  } catch (e) {
+    debugPrint('Error sharing post: $e');
+  }
+},
           ),
         ],
       ),

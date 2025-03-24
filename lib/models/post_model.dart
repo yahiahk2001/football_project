@@ -38,7 +38,7 @@ class ReporterPost {
         ? Supabase.instance.client.storage
             .from('images')
             .getPublicUrl('profiles/${profilePicturePath.split('/').last}')
-        : 'https://bitsofco.de/img/Qo5mfYDE5v-350.png';
+        : 'https://t3.ftcdn.net/jpg/03/53/11/00/360_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg';
     final createdAt =
         DateTime.parse(json['created_at']).subtract(const Duration(hours: -3));
     final timeAgo = timeago.format(createdAt);
